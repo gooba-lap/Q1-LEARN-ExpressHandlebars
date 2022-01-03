@@ -37,7 +37,20 @@ function InsertRecord(req,res){
 }
 
 router.get('/list', (req,res) => {
-    res.json('from list');
+    Employee.find((err, docs) => {
+        if (!err) {
+            //  Solved! Handlebars: Access has been denied to resolve the property "name" 
+            //  because it is not an "own property" of its parent Fixed
+            docs = docs.map(item=> item.toObject())
+            // 
+            res.render("employee/list", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retreieving employee list :' + err);
+        }
+    })
 })
 
 function handleValidationError(err,body){
