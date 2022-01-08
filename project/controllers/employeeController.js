@@ -10,10 +10,10 @@ router.get('/',(req,res) => {
 });
 
 router.post('/',(req,res) => {
-    InsertRecord(req,res);
+    insertRecord(req,res);
 });
 
-function InsertRecord(req,res){
+function insertRecord(req,res){
     var employee = new Employee();
     employee.fullName = req.body.fullName;
     employee.email = req.body.email;
@@ -41,7 +41,7 @@ router.get('/list', (req,res) => {
         if (!err) {
             //  Solved! Handlebars: Access has been denied to resolve the property "name" 
             //  because it is not an "own property" of its parent Fixed
-            docs = docs.map(item=> item.toObject())
+            docs = docs.map(item => item.toObject())
             // 
             res.render("employee/list", {
                 list: docs
@@ -67,5 +67,45 @@ function handleValidationError(err,body){
         }
     }
 };
+
+// -------------------------------------------------------------------------
+
+// this > old > data don't show
+
+// (node:74014) Warning: Accessing non-existent property 'count' of module exports inside circular dependency
+
+// router.get('/:id', (req,res) => {
+//     Employee.findById(req.params.id, (err,doc) => {
+//         if (!err) {
+            
+//             res.render("employee/addOrEdit", { 
+//                 viewTitle: "Update Employee",
+//                 employee: doc   
+//             });
+//         }
+//         if (err) {
+//             console.log(err)
+//         } else {
+//             console.log(doc)
+//         }
+
+//     });
+// });
+
+// this fix show data from mongoDB
+ 
+router.get('/:id', function(req,res) {
+    Employee.findById(req.params.id, async (err,doc) => {
+        if(!err){
+            res.render("employee/addOrEdit", {
+                viewTitle: "Update Employee",
+                employee: doc._doc
+            })
+        }
+    })
+})
+
+// -------------------------------------------------------------------------
+
 
 module.exports = router;
