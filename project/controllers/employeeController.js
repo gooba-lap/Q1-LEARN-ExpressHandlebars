@@ -119,7 +119,7 @@ router.get('/:id', function(req,res) {
     Employee.findById(req.params.id, async (err,doc) => {
         if(!err){
             res.render("employee/addOrEdit", {
-                viewTitle: "Update Employee",
+                viewTitle: "Update Employee", 
                 employee: doc._doc
             })
         }
