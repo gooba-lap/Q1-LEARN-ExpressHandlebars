@@ -3,11 +3,11 @@
 
 | Italic             |  Block letters  |
 |--------------------|-----------------|
-|[view]              |[add]            |
+|![view]             |![add]           |
 
 | Italic             |  
 :-------------------:|
-|[update]            |
+|![update]           |
 
 
 [view]: https://github.com/gooba-lap/Q1-LEARN-ExpressHandlebars/blob/P1-T-Salvando-el-semestre/previews/view-all.png
