@@ -25,12 +25,72 @@ function insertRecord(req,res) {
             res.redirect('employee/list');
         else {
             console.log('Error during record insertion : ' + err);
+            if(err.name == 'ValidationError'){
+                handleValidationError(err, req.body);
+                res.render("employee/addOrEdit", {
+                    viewTitle: "Insert Employee",
+                    employee: req.body
+                });
+            }
+            else
+                console.log('Error during record insertion : ' + err);
         }
     });
 }
 
+// ----------------------------------------------------- -----------------------------------------------------
+
+// new
+
 router.get('/list', (req, res) => {
-    res.json('from list');
+    Employee.find((err, docs) => {
+        if (!err) {
+            //  Solved! Handlebars: Access has been denied to resolve the property "name" 
+            //  because it is not an "own property" of its parent Fixed
+            docs = docs.map(item => item.toObject())
+            // 
+            res.render("employee/list", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retreieving employee list :' + err);
+        }
+    })
 });
+
+//old
+
+// router.get('/list', (req,res) => {
+//     Employee.find((err, docs) => {
+//         if (!err) {
+//             res.render("employee/list", {
+//                 list: docs
+//             });
+//         }
+//         else {
+//             console.log('Error in retrienving employee list :' + err);
+//         }
+//     })
+// })
+
+// ----------------------------------------------------- -----------------------------------------------------
+
+
+
+function handleValidationError(err,body){
+    for(field in err.errors) {
+        switch (err.errors[field].path) {
+            case 'fullName':
+                body['fullNameError'] = err.errors[field].message;
+                break;
+            case 'email':
+                body['emailError'] = err.errors[field].message;    
+                break;
+            default:
+                break;
+        }
+    }
+};
 
 module.exports = router;

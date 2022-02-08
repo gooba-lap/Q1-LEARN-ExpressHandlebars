@@ -3,20 +3,26 @@
 <form action="/employee" method="POST" autocomplete="off">
     <div class="form-group">
         <label>Full Name</label>
-        <input type="text" class="form-control" name="fullName" id="Full Name">
+        <input type="text" class="form-control" name="fullName" id="Full Name" value="{{employee.fullName}}">
+        <div class="text-danger">
+            {{employee.fullNameError}}
+        </div>
     </div>
     <div class="form-group">
         <label>Email</label>
-        <input type="text" class="form-control" name="email" id="Email">
+        <input type="text" class="form-control" name="email" id="Email" value="{{employee.email}}">
+        <div class="text-danger">
+            {{employee.emailError}}
+        </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Mobile</label>
-            <input type="text" class="form-control" name="mobile" id="Mobile">
+            <input type="text" class="form-control" name="mobile" id="Mobile" value="{{employee.mobile}}">
         </div>
         <div class="form-group col-md-6">
             <label>City</label>
-            <input type="text" class="form-control" name="city" id="City">
+            <input type="text" class="form-control" name="city" id="City" value="{{employee.city}}"> 
         </div>
     </div>
     <div class="form-group">
