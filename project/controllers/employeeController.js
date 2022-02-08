@@ -10,8 +10,12 @@ router.get('/', (req,res) => {
 });
 
 router.post('/',(req, res) => {
-    // console.log(req.body);  
-    insertRecord(req, res);
+    console.log(req.body);  
+    //
+    if (req.body._id == '')
+        insertRecord(req, res);
+        else
+        updateRecord(req, res);
 });
 
 function insertRecord(req,res) {
@@ -36,6 +40,21 @@ function insertRecord(req,res) {
                 console.log('Error during record insertion : ' + err);
         }
     });
+}
+
+function updateRecord(req, res) {
+    Employee.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, doc) => {
+        if (!err) { res.redirect('employee/list'); }
+        else {
+            if (err.name == 'ValidationError') {
+                handleValidationError(err, req.body);
+                res.render("employee/addOrEdit", {
+                    viewTitle: 'Update Employee',
+                    employee: req.body
+                })
+            }
+        }
+    })
 }
 
 // ----------------------------------------------------- -----------------------------------------------------
@@ -129,6 +148,14 @@ router.get('/:id', function(req,res) {
 
 // -------------------------------------------------------------------------
 
+router.get('/delete/:id', (req, res) => {
+    Employee.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err) {
+            res.redirect('/employee/list');
+        }
+        else { console.log('Error in employee delete :' + err); }
+    })
+})
 
 
 module.exports = router;
