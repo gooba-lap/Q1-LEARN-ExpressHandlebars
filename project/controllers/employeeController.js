@@ -76,8 +76,6 @@ router.get('/list', (req, res) => {
 
 // ----------------------------------------------------- -----------------------------------------------------
 
-
-
 function handleValidationError(err,body){
     for(field in err.errors) {
         switch (err.errors[field].path) {
@@ -92,5 +90,45 @@ function handleValidationError(err,body){
         }
     }
 };
+
+// -------------------------------------------------------------------------
+
+// this > old > data don't show
+
+// (node:74014) Warning: Accessing non-existent property 'count' of module exports inside circular dependency
+
+// router.get('/:id', (req,res) => {
+//     Employee.findById(req.params.id, (err,doc) => {
+//         if (!err) {
+//             res.render("employee/addOrEdit", { 
+//                 viewTitle: "Update Employee",
+//                 employee: doc   
+//             });
+//         }
+//         if (err) {
+//             console.log(err)
+//         } else {
+//             console.log(doc)
+//         }
+
+//     });
+// });
+
+// this fix show data from mongoDB
+ 
+router.get('/:id', function(req,res) {
+    Employee.findById(req.params.id, async (err,doc) => {
+        if(!err){
+            res.render("employee/addOrEdit", {
+                viewTitle: "Update Employee",
+                employee: doc._doc
+            })
+        }
+    })
+})
+
+// -------------------------------------------------------------------------
+
+
 
 module.exports = router;
